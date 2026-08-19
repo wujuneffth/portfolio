@@ -799,7 +799,7 @@
 
 <sc-if value="{{ resumeOpen }}" hint-placeholder-val="{{ false }}">
   <div class="resume-overlay" role="dialog" aria-modal="true" aria-label="简历" onClick="{{ closeResume }}">
-    <iframe src="resume.dc.html?embed=1" title="张政 简历" onClick="{{ stopProp }}"></iframe>
+    <iframe src="resume.dc.html?embed=1" title="张政 简历" loading="lazy" onClick="{{ stopProp }}"></iframe>
   </div>
 </sc-if>
 
