@@ -3,32 +3,46 @@
   "cleanUrls": false,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/", "destination": "/portfolio.dc.html" },
-    { "source": "/resume", "destination": "/resume.dc.html" }
+    {
+      "source": "/resume",
+      "destination": "/resume.dc.html"
+    }
   ],
   "headers": [
     {
       "source": "/(portfolio.dc.html|resume.dc.html|index.html|works-data.js)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
       ]
     },
     {
       "source": "/assets/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
       ]
     },
     {
       "source": "/vendor/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000, stale-while-revalidate=86400"
+        }
       ]
     },
     {
       "source": "/(support.js|doc-page.js)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
       ]
     }
   ]
