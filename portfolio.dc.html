@@ -13,9 +13,24 @@
   <title>张政 · 视觉设计师作品集</title>
   <meta name="description" content="张政，视觉设计师，现居苏州。活动全案视觉、书籍装帧与网页界面。">
   <script defer src="./vendor/lenis.min.js"></script>
-  <script defer src="./vendor/rive-canvas.js"></script>
   <script src="./works-data.js"></script>
-  <script src="./rive-asset.js"></script>
+  <script>
+  /* Rive 那一套（运行时 448KB + wasm 2.1MB + 动画数据 180KB ≈ 2.7MB）
+     占首屏下载量的八成。defer 只推迟执行、不推迟下载，网慢时照样抢带宽，
+     所以改成等页面加载完再动态插入。_mountRive 是每 200ms 轮询等待的，
+     脚本晚到也能正常挂上，只是动画迟一点出现。 */
+  (function () {
+    function loadRive() {
+      ['./rive-asset.js', './vendor/rive-canvas.js'].forEach(function (src) {
+        var s = document.createElement('script');
+        s.src = src; s.async = true;
+        document.head.appendChild(s);
+      });
+    }
+    if (document.readyState === 'complete') setTimeout(loadRive, 200);
+    else window.addEventListener('load', function () { setTimeout(loadRive, 200); });
+  })();
+  </script>
   <meta name="ext-resource-dependency" content="assets/works/double-2025.webp" data-resource-id="assets/works/double-2025.webp">
   <meta name="ext-resource-dependency" content="assets/works/duanwu-2023.webp" data-resource-id="assets/works/duanwu-2023.webp">
   <meta name="ext-resource-dependency" content="assets/works/duanwu-2024.webp" data-resource-id="assets/works/duanwu-2024.webp">
