@@ -3,18 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
-<script>window.React||document.write('<scr'+'ipt src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"><\/scr'+'ipt>');</script>
-<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
-<script>window.ReactDOM||document.write('<scr'+'ipt src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"><\/scr'+'ipt>');</script>
+<script src="./vendor/react.production.min.js"></script>
+<script src="./vendor/react-dom.production.min.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     body { margin: 0; background: #F3F4F6; -webkit-font-smoothing: antialiased; }
@@ -29,12 +24,12 @@
 </helmet>
 
 <div class="no-print" style="position: fixed; right: 20px; bottom: 20px; z-index: 50;">
-  <button onClick="{{ printDoc }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border-radius: 999px; background: #1A1A1A; color: #FFFFFF; border: none; font-family: Poppins, 'Noto Sans SC', sans-serif; font-size: 13px; letter-spacing: .04em; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,.18);">导出 PDF</button>
+  <button onClick="{{ printDoc }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border-radius: 999px; background: #1A1A1A; color: #FFFFFF; border: none; font-family: -apple-system, 'Noto Sans SC', sans-serif; font-size: 13px; letter-spacing: .04em; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,.18);">导出 PDF</button>
 </div>
 
 <x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="0" hint-size="100%,1120px">
   
-<div data-sheet="1" style="position: relative; width: 595px; height: 842px; background: #FFFFFF; overflow: hidden; font-family: Poppins, 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; color: #000000;">
+<div data-sheet="1" style="position: relative; width: 595px; height: 842px; background: #FFFFFF; overflow: hidden; font-family: -apple-system, 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; color: #000000;">
 
     <!-- ===== 装饰 ===== -->
     <div style="position: absolute; left: -70px; top: -110px; width: 740px; height: 430px; background: radial-gradient(50% 50% at 50% 50%, rgba(72,145,255,.09) 0%, rgba(72,145,255,0) 72%); print-color-adjust: exact"><div style="position: absolute; left: 196px; top: 268px; z-index: 3; display: flex; align-items: center; padding: 7.7px 11.55px; background: #FFFFFF; box-shadow: 0px 19.26px 14.44px rgba(25,25,46,.04); border-radius: 7.7px; font-size: 8px; font-weight: 400; line-height: 1.5; letter-spacing: -.01em; color: #5D87A8; white-space: nowrap">活动视觉</div></div>
