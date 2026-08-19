@@ -791,7 +791,7 @@
     <div class="proj-images {{ projStackedClass }}">
       <sc-for list="{{ projImages }}" as="im" hint-placeholder-count="3">
         <sc-if value="{{ im.isImg }}" hint-placeholder-val="{{ true }}"><img src="{{ im.src }}" alt="{{ im.alt }}" loading="lazy" onClick="{{ stopProp }}"></sc-if>
-        <sc-if value="{{ im.isVid }}" hint-placeholder-val="{{ false }}"><video src="{{ im.src }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" onClick="{{ stopProp }}"></video></sc-if>
+        <sc-if value="{{ im.isVid }}" hint-placeholder-val="{{ false }}"><video src="{{ im.src }}" preload="none" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" onClick="{{ stopProp }}"></video></sc-if>
       </sc-for>
     </div>
   </div>
@@ -896,7 +896,7 @@
         <div class="pub-covers" role="group" aria-label="作品图片">
           <sc-for list="{{ editCovers }}" as="ecv" hint-placeholder-count="3">
             <div class="pub-cover-wrap {{ ecv.dragging }}" draggable="true" onDragStart="{{ ecv.onDragStart }}" onDragEnter="{{ ecv.onDragEnter }}" onDragOver="{{ onEcvDragOver }}" onDrop="{{ onEcvDrop }}" onDragEnd="{{ onEcvDragEnd }}">
-              <button type="button" class="pub-cover" aria-pressed="{{ ecv.selected }}" onClick="{{ ecv.onClick }}"><sc-if value="{{ ecv.isImg }}" hint-placeholder-val="{{ false }}"><img src="{{ ecv.src }}" alt="封面候选" loading="lazy"></sc-if><sc-if value="{{ ecv.isVid }}" hint-placeholder-val="{{ false }}"><video src="{{ ecv.src }}" muted="{{ true }}" loop="{{ true }}" autoPlay="{{ true }}" playsInline="{{ true }}"></video></sc-if></button>
+              <button type="button" class="pub-cover" aria-pressed="{{ ecv.selected }}" onClick="{{ ecv.onClick }}"><sc-if value="{{ ecv.isImg }}" hint-placeholder-val="{{ false }}"><img src="{{ ecv.src }}" alt="封面候选" loading="lazy"></sc-if><sc-if value="{{ ecv.isVid }}" hint-placeholder-val="{{ false }}"><video src="{{ ecv.src }}" preload="none" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}"></video></sc-if></button>
               <button type="button" class="pub-cover-del" onClick="{{ ecv.onRemove }}" aria-label="移除这张图" title="移除这张图">✕</button>
             </div>
           </sc-for>
@@ -925,7 +925,7 @@
   <div class="lightbox" role="dialog" aria-modal="true" onClick="{{ closeLightbox }}">
     
     <sc-if value="{{ lightboxIsImg }}" hint-placeholder-val="{{ false }}"><img class="lightbox__img" src="{{ lightboxSrc }}" alt="{{ lightboxTitle }}" loading="lazy" onClick="{{ stopProp }}"></sc-if>
-    <sc-if value="{{ lightboxIsVid }}" hint-placeholder-val="{{ false }}"><video class="lightbox__img" src="{{ lightboxSrc }}" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" controls="{{ true }}" onClick="{{ stopProp }}"></video></sc-if>
+    <sc-if value="{{ lightboxIsVid }}" hint-placeholder-val="{{ false }}"><video class="lightbox__img" src="{{ lightboxSrc }}" preload="none" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" controls="{{ true }}" onClick="{{ stopProp }}"></video></sc-if>
     <p class="lightbox__caption">{{ lightboxTitle }}</p>
   </div>
 </sc-if>
