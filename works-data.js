@@ -298,6 +298,10 @@ window.__ZZ_WORKS = [
   var d = (window.__ZZ_WORKS || []).slice();
   d.forEach(function (w) {
     w.cover = w.images[w.coverIdx] || w.images[0] || '';
+    /* 卡片用 assets/thumb 里的 4:3 缩略图（省 75% 下载量），
+       灯箱大图仍然用 images 里的原图。
+       加了新作品后跑一次 `python3 生成缩略图.py` 重新生成。 */
+    w.thumb = w.cover.replace('assets/proj/', 'assets/thumb/');
     delete w.coverIdx;
   });
   d.sort(function (a, b) { return (a.ord || 0) - (b.ord || 0); });
@@ -305,5 +309,5 @@ window.__ZZ_WORKS = [
   window.__ZZ_SEED_TOTAL = d.length;
   /* 每次改上面的作品列表，这个数字都要 +1，
      否则老访客浏览器里的缓存会盖掉新内容 */
-  window.__ZZ_SEED_VER = 4;
+  window.__ZZ_SEED_VER = 5;
 })();

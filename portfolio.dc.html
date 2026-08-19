@@ -1793,7 +1793,14 @@ class Component extends DCLogic {
       { cat: 'poster', catLabel: '海报', title: '国庆·《华诞七十四》',        year: '2023', ph: 'photo', img: 'assets/works/nationalday-2023.webp' },
     ];
 
-    allCards.forEach(c => { if (c.img) { c.raw = c.img; c.img = this._res(c.img); } });
+    /* 卡片只有 341x256，用 assets/thumb 里的 4:3 缩略图；
+       灯箱大图仍然走 images 里的原图。 */
+    allCards.forEach(c => {
+      if (!c.img) return;
+      c.raw = c.img;
+      if (!c.images) c.images = [this._res(c.img)];
+      c.img = this._res(c.img.replace('assets/works/', 'assets/thumb/'));
+    });
 
     const catLabelMap = { all: '全部作品', poster: '海报', book: '书籍装帧', event: '活动视觉', collateral: '项目物料', ui: '网页UI' };
     const publishedCards = this.state.published.map(w => ({
@@ -1803,7 +1810,7 @@ class Component extends DCLogic {
       title: w.title,
       year: w.year,
       ph: 'photo',
-      img: w.cover || (w.images && w.images[0]) || '',
+      img: w.thumb || w.cover || (w.images && w.images[0]) || '',
       images: w.images || [],
       imgPos: '50% 0%',
       isPublished: true,
