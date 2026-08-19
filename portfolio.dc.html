@@ -14,23 +14,6 @@
   <meta name="description" content="张政，视觉设计师，现居苏州。活动全案视觉、书籍装帧与网页界面。">
   <script defer src="./vendor/lenis.min.js"></script>
   <script src="./works-data.js"></script>
-  <script>
-  /* Rive 那一套（运行时 448KB + wasm 2.1MB + 动画数据 180KB ≈ 2.7MB）
-     占首屏下载量的八成。defer 只推迟执行、不推迟下载，网慢时照样抢带宽，
-     所以改成等页面加载完再动态插入。_mountRive 是每 200ms 轮询等待的，
-     脚本晚到也能正常挂上，只是动画迟一点出现。 */
-  (function () {
-    function loadRive() {
-      ['./rive-asset.js', './vendor/rive-canvas.js'].forEach(function (src) {
-        var s = document.createElement('script');
-        s.src = src; s.async = true;
-        document.head.appendChild(s);
-      });
-    }
-    if (document.readyState === 'complete') setTimeout(loadRive, 200);
-    else window.addEventListener('load', function () { setTimeout(loadRive, 200); });
-  })();
-  </script>
   <meta name="ext-resource-dependency" content="assets/works/double-2025.webp" data-resource-id="assets/works/double-2025.webp">
   <meta name="ext-resource-dependency" content="assets/works/duanwu-2023.webp" data-resource-id="assets/works/duanwu-2023.webp">
   <meta name="ext-resource-dependency" content="assets/works/duanwu-2024.webp" data-resource-id="assets/works/duanwu-2024.webp">
@@ -733,7 +716,8 @@
       <div class="section-head"><h2 style="height: 99px">关于我</h2></div>
       <div class="about__grid">
         <div class="about__photo reveal">
-          <canvas ref="{{ riveRef }}" aria-label="张政" role="img"></canvas>
+          <img src="assets/aquarium.webp" alt="张政" loading="lazy" 
+               style="width:100%;height:100%;object-fit:cover;display:block">
         </div>
         <div class="about__text reveal">
           <div class="about__ident">
@@ -1041,7 +1025,6 @@ class Component extends DCLogic {
     super(props);
     this.heroTitleRef = React.createRef();
     this.heroInnerRef = React.createRef();
-    this.riveRef = React.createRef();
     this.hero2Ref = React.createRef();
     this.projOverlayRef = React.createRef();
     this.uploadInputRef = React.createRef();
@@ -1060,7 +1043,6 @@ class Component extends DCLogic {
     this._onScroll();
     try { const raw = localStorage.getItem(this._CROPS_KEY); if (raw) this.setState({ crops: JSON.parse(raw) || {} }); } catch (e) {}
     this._loadStores();
-    this._mountRive();
     try { this._dragGhost = new Image(); this._dragGhost.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; } catch (e) {}
     this._setupReveal();
     this._initLenis();
@@ -1153,53 +1135,8 @@ class Component extends DCLogic {
     });
   };
 
-  _mountRive = () => {
-    const cv = this.riveRef.current;
-    if (!cv) { this._riveCanvas = null; return; }
-    if (this._riveCanvas === cv) return;
-    if (!window.rive || !window.rive.Rive) {
-      clearTimeout(this._riveWait);
-      this._riveWait = setTimeout(this._mountRive, 200);
-      return;
-    }
-    this._riveCanvas = cv;
-    try { if (this._rive) this._rive.cleanup(); } catch (e) {}
-    const R = window.rive;
-    /* 不走 unpkg，用仓库里的 wasm，否则首屏要跨境拉 1.7MB */
-    try { if (R.RuntimeLoader && R.RuntimeLoader.setWasmUrl) R.RuntimeLoader.setWasmUrl('./vendor/rive.wasm'); } catch (e) {}
-    let riveSrc = { src: 'assets/aquarium.riv' };
-    if (typeof window.__ZZ_RIVE_B64 === 'string') {
-      try {
-        const bin = atob(window.__ZZ_RIVE_B64);
-        const bytes = new Uint8Array(bin.length);
-        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-        riveSrc = { buffer: bytes.buffer };
-      } catch (e) {}
-    }
-    this._rive = new R.Rive({
-      ...riveSrc,
-      canvas: cv,
-      autoplay: true,
-      stateMachines: 'State Machine 1',
-      autoBind: true,
-      layout: new R.Layout({ fit: R.Fit.Cover, alignment: R.Alignment.Center }),
-      onLoad: () => {
-        try {
-          const sms = this._rive.stateMachineNames || [];
-          if (sms.length && !this._rive.isPlaying) this._rive.play(sms[0]);
-          this._rive.resizeDrawingSurfaceToCanvas();
-        } catch (e) {}
-      }
-    });
-    if (!this._riveResize) {
-      this._riveResize = () => { try { if (this._rive) this._rive.resizeDrawingSurfaceToCanvas(); } catch (e) {} };
-      window.addEventListener('resize', this._riveResize);
-    }
-  };
-
   componentDidUpdate() {
     this._syncInfoScroll();
-    this._mountRive();
     if (this._lastPage !== this.state.page) {
       this._lastPage = this.state.page;
       // Scroll reset is handled by _swapPage.
@@ -1226,9 +1163,6 @@ class Component extends DCLogic {
   componentWillUnmount() {
     window.removeEventListener('resize', this._syncInfoScroll);
     (this._infoScrollTimers || []).forEach(clearTimeout);
-    clearTimeout(this._riveWait);
-    if (this._riveResize) window.removeEventListener('resize', this._riveResize);
-    try { if (this._rive) this._rive.cleanup(); } catch (e) {}
     window.removeEventListener('scroll', this._onScroll);
     window.removeEventListener('keydown', this._onKey);
     window.removeEventListener('message', this._onMsg);
@@ -2044,7 +1978,6 @@ class Component extends DCLogic {
       closeLightbox: this._closeLightbox,
       hero2Ref: this.hero2Ref,
       heroInnerRef: this.heroInnerRef,
-      riveRef: this.riveRef,
       goHome: this._goHome,
       goWorks: this._goWorks,
       goAbout: this._goAbout,
