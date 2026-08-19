@@ -2,15 +2,33 @@
    张政 作品集 · 作品数据
    ------------------------------------------------------------
    加一个新作品：
-     1. 图片放进 assets/proj/，按 p16-01.webp、p16-02.webp … 命名
-     2. 复制下面任意一段 { … }，粘到列表最前面（最新的排最前）
-     3. ord 填一个比现有最大值更大的数字；图片按顺序列进 images
-     4. cat 只能是 "event"（活动策划）/ "poster"（海报）/ "collateral"（物料）
+     1. 图片放进 assets/proj/，按 p17-01.webp、p17-02.webp … 命名
+        （编号往后顺延，别和已有的 p01～p16 重复）
+     2. 复制下面任意一段 { … }，粘到列表里；图片按顺序列进 images
+     3. ord 决定排序，越小越靠前。要排在最前面就填一个比现有最小值
+        更小的数（现在最小是 -1）；要排最后就填比最大值更大的数
+     4. cat 六选一：
+          "poster"     海报
+          "book"       书籍装帧
+          "event"      活动视觉
+          "collateral" 项目物料
+          "ui"         网页UI
      5. coverIdx = 用第几张图当封面（0 = 第一张）
    改完保存、推到仓库，网站一两分钟后自动更新。
    ============================================================ */
 
 window.__ZZ_WORKS = [
+  /* ↓↓↓ COMART 双年鉴：图片(p16-01.webp …)做好放进 assets/proj/ 后，
+         把下面这段的注释去掉，并把 images 按实际张数补齐 ↓↓↓
+  {
+    ord: -1, id: "u1787106388407", cat: "book", year: "2025",
+    title: "《COMART 国际数艺双年鉴》2024—2025",
+    coverIdx: 0,
+    images: [
+      "assets/proj/p16-01.webp"
+    ]
+  },
+  ↑↑↑ COMART 双年鉴 ↑↑↑ */
   {
     ord: 0, id: "u1786857110042", cat: "poster", year: "2024",
     title: "全球数字艺术标杆项目考察&引进之旅·日本站（第四站）未成团",
@@ -285,5 +303,7 @@ window.__ZZ_WORKS = [
   d.sort(function (a, b) { return (a.ord || 0) - (b.ord || 0); });
   window.__ZZ_PUBLISHED_SEED = d;
   window.__ZZ_SEED_TOTAL = d.length;
-  window.__ZZ_SEED_VER = 3;
+  /* 每次改上面的作品列表，这个数字都要 +1，
+     否则老访客浏览器里的缓存会盖掉新内容 */
+  window.__ZZ_SEED_VER = 4;
 })();
