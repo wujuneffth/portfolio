@@ -29,7 +29,7 @@ def covers():
     # 作品卡 object-position 是 50% 0%（从顶部取景）
     out = [(c, 0.0) for c in json.loads(r.stdout)]
     # 节日海报硬编码在 html 里，默认 object-position 50% 30%
-    html = open('portfolio.dc.html', encoding='utf-8').read()
+    html = open('index.html', encoding='utf-8').read()
     out += [(c, 0.30) for c in sorted(set(re.findall(r"assets/works/[a-z0-9-]+\.webp", html)))]
     return out
 

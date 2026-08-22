@@ -4,6 +4,7 @@
 
     python3 打包单文件.py                  # 原图质量，文件较大
     python3 打包单文件.py --px 1200 -q 76  # 压一档，文件小、打开快
+    python3 打包单文件.py --out 轻量.html   # 指定输出文件名
 
 产出 张政作品集-单文件.html。
 所有图片、字体、JS 全部内联成 data URI，简历页用 srcdoc 塞进 iframe。
@@ -49,6 +50,21 @@ THUMB_FIX = ("w.thumb = w.cover.replace('assets/proj/', 'assets/thumb/');",
              "w.thumb = w.cover;  /* 单文件版：缩略图与原图共用一份内联数据 */")
 
 
+def inline_imports(html, base="."):
+    """<x-import from="./doc-page.js"> 是框架的运行时 fetch，不是 script 标签。
+       file:// 下会被 CORS 拦掉，必须把地址换成 data: URL。"""
+    def rep(m):
+        pre, src, post = m.group(1), m.group(2), m.group(3)
+        p = os.path.join(base, src.lstrip("./"))
+        if not os.path.exists(p):
+            return m.group(0)
+        code = open(p, encoding="utf-8").read()
+        code, _ = inline_assets(code, base)
+        b64 = base64.b64encode(code.encode("utf-8")).decode()
+        return '%sfrom="data:text/javascript;base64,%s"%s' % (pre, b64, post)
+    return re.sub(r'(<x-import[^>]*?)from="(\.?/?[^"]+\.js)"([^>]*>)', rep, html)
+
+
 def inline_scripts(html, base="."):
     """<script src="./x.js"> → 内容内联成 data: URL。"""
     def rep(m):
@@ -90,6 +106,7 @@ def inline_assets(html, base="."):
 def build_resume():
     """把简历页做成自包含 HTML，用来塞进 iframe 的 srcdoc。"""
     h = open("resume.dc.html", encoding="utf-8").read()
+    h = inline_imports(h)
     h = inline_scripts(h)
     h, n = inline_assets(h)
     print("  简历页内联了 %d 个资源" % n)
@@ -129,7 +146,8 @@ def main():
                lambda m: '<iframe srcdoc="%s"' % esc, h, count=1)
 
     # 2) 内联全部脚本
-    print("内联脚本 …")
+    print("内联脚本和运行时导入 …")
+    h = inline_imports(h)
     h = inline_scripts(h)
 
 
@@ -143,7 +161,7 @@ def main():
     h = h.replace("</head>",
                   "<script>window.__ZZ_STANDALONE=1;</script>\n</head>", 1)
 
-    out = "张政作品集-单文件.html"
+    out = a[a.index("--out") + 1] if "--out" in a else "张政作品集-单文件.html"
     open(out, "w", encoding="utf-8").write(h)
     mb = os.path.getsize(out) / 1048576
     left = h.count("assets/") + h.count("vendor/")
