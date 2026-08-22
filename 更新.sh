@@ -30,6 +30,8 @@ python3 生成PDF.py | tail -2
 if [ "$1" = "push" ]; then
   echo
   echo "── 推送到线上 ──"
+  # 只提交站点本身。成品（单文件/PDF）已在 .gitignore 里，
+  # 它们体积大又能随时重做，进仓库只会让 .git 无限膨胀。
   git add -A
   git commit -q -m "更新作品：$(date '+%Y-%m-%d %H:%M')" || echo "  没有改动可提交"
   git push origin main
